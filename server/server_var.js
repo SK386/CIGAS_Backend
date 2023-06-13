@@ -1,4 +1,6 @@
-const SERVER_PORT = 7470;
+const server = {
+	SERVER_PORT:7470
+}
 
 
-module.exports;
+module.exports = server; 
