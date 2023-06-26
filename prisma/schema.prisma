@@ -11,3 +11,52 @@ datasource db {
 }
 
 
+model School{
+  uuid Int @default(autoincrement()) @id
+  subsidiary String @unique
+}
+
+model Classroom{
+  uuid Int @id @default(autoincrement())
+  number Int @unique
+  // school School @relation(fields: [School], references: [uuid])
+  capacity Int 
+  storey Int
+  block String?
+
+}
+
+model Class{
+  uuid Int @id @default(autoincrement())
+  school_year String
+  // classroom_id Classroom @relation(fields: [Classroom], references: [uuid])
+  // school_id School @relation(fields: [School], references: [uuid])
+  class_year Int
+}
+
+model Person{
+  uuid Int @id @default(autoincrement())
+  name String 
+  last_name String 
+  contact_email String @unique
+  phone String?
+  role String
+}
+
+model Teacher{
+  uuid Int @id
+  // person_id Person @relation(fields: [Person], references: [uuid])
+  // school_id School @relation(fields: [School], references: [uuid])
+}
+
+model Student{
+  uuid Int @id @default(autoincrement())
+  // school_id School @relation(fields: [School], references: [uuid])  
+  // person_id Person @relation(fields: [Person], references: [uuid]) 
+}
+
+model Student_class{
+  uuid Int @id @default(autoincrement())
+  // class_id Class @relation(fields: [Class], references: [uuid])
+  // school_id School @relation(fields: [School], references: [uuid])  
+}
