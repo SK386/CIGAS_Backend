@@ -49,6 +49,11 @@ model Teacher{
   // school_id School @relation(fields: [School], references: [uuid])
 }
 
+model Teacher_discipline{
+  uuid Int @id
+  teacher_id Int
+}
+
 model Student{
   uuid Int @id @default(autoincrement())
   // school_id School @relation(fields: [School], references: [uuid])  
@@ -59,4 +64,14 @@ model Student_class{
   uuid Int @id @default(autoincrement())
   // class_id Class @relation(fields: [Class], references: [uuid])
   // school_id School @relation(fields: [School], references: [uuid])  
+}
+
+model Timetable{
+  uuid Int @id
+  When String
+}
+
+model Employee {
+  uuid Int @id @default(autoincrement())
+  // school_id
 }
