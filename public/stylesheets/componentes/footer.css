@@ -1,0 +1,15 @@
+ /* footer cutomization */
+ footer{
+    width: 100%;
+    height: 12vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: static;
+    font-family: "Poppins";
+    z-index: 50;
+    bottom: 0;
+    background-color: #010d18;
+    color: aliceblue;
+  }
