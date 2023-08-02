@@ -11,67 +11,73 @@ datasource db {
 }
 
 
-model School{
-  uuid Int @default(autoincrement()) @id
-  subsidiary String @unique
+model School {
+  uuid          Int            @id @default(autoincrement())
+  subsidiary    String         @unique
+  Student       Student?
+  Teacher       Teacher?
+  Student_class Student_class?
+  Classroom     Classroom?
+  Class         Class?
 }
 
-model Classroom{
-  uuid Int @id @default(autoincrement())
-  number Int @unique
-  // school School @relation(fields: [School], references: [uuid])
-  capacity Int 
-  storey Int
-  block String?
-
+model Classroom {
+  uuid      Int     @id @default(autoincrement())
+  number    Int     @unique
+  school    School  @relation(fields: [school_Id], references: [uuid])
+  school_Id Int     @unique
+  capacity  Int
+  storey    Int
+  block     String?
+  Class     Class?
 }
 
-model Class{
-  uuid Int @id @default(autoincrement())
-  school_year String
-  // classroom_id Classroom @relation(fields: [Classroom], references: [uuid])
-  // school_id School @relation(fields: [School], references: [uuid])
-  class_year Int
+model Class {
+  uuid          Int            @id @default(autoincrement())
+  school_year   String
+  classroom_    Classroom      @relation(fields: [classroom_id], references: [uuid])
+  classroom_id  Int            @unique
+  school        School         @relation(fields: [school_Id], references: [uuid])
+  school_Id     Int            @unique
+  class_year    Int
+  Student_class Student_class?
 }
 
-model Person{
-  uuid Int @id @default(autoincrement())
-  name String 
-  last_name String 
-  contact_email String @unique
-  phone String?
-  role String
+model Person {
+  uuid          Int      @id @default(autoincrement())
+  name          String
+  last_name     String
+  contact_email String   @unique
+  phone         String?
+  role          String
+  Teacher       Teacher?
+  Student       Student?
 }
 
-model Teacher{
+model Teacher {
+  uuid      Int    @id @default(autoincrement())
+  person    Person @relation(fields: [person_Id], references: [uuid])
+  person_Id Int    @unique
+  school    School @relation(fields: [school_Id], references: [uuid])
+  school_Id Int    @unique
+}
+
+model Teacher_discipline {
   uuid Int @id
-  // person_id Person @relation(fields: [Person], references: [uuid])
-  // school_id School @relation(fields: [School], references: [uuid])
 }
 
-model Teacher_discipline{
-  uuid Int @id
-  teacher_id Int
+model Student {
+  uuid      Int    @id @default(autoincrement())
+  person    Person @relation(fields: [person_Id], references: [uuid])
+  person_Id Int    @unique
+  school    School @relation(fields: [school_Id], references: [uuid])
+  school_Id Int    @unique
 }
 
-model Student{
-  uuid Int @id @default(autoincrement())
-  // school_id School @relation(fields: [School], references: [uuid])  
-  // person_id Person @relation(fields: [Person], references: [uuid]) 
-}
-
-model Student_class{
-  uuid Int @id @default(autoincrement())
-  // class_id Class @relation(fields: [Class], references: [uuid])
-  // school_id School @relation(fields: [School], references: [uuid])  
-}
-
-model Timetable{
-  uuid Int @id
-  When String
-}
-
-model Employee {
-  uuid Int @id @default(autoincrement())
-  // school_id
+model Student_class {
+  uuid      Int    @id @default(autoincrement())
+  class     Class  @relation(fields: [class_id], references: [uuid])
+  class_id  Int    @unique
+  school    School @relation(fields: [school_Id], references: [uuid])
+  school_Id Int    @unique
 }
