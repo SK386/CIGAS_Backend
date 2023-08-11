@@ -5,11 +5,14 @@ const app = express();
 app.use(express.json());
 
 // Controllers
-import { register, login } from "./controllers/auth.js";
+import { register, login, tokenMiddleware } from "./controllers/auth.js";
 
 app.get("/", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.send(JSON.stringify({ msg: "Hello, World!" }));
+    res.json({msg: "Hello, World!"});
+});
+
+app.get("/authorized", tokenMiddleware, (req, res) => {
+    res.json({msg: "Authorized!"});
 });
 
 app.post("/auth/register", register);
