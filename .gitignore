@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Including Migrations in Commits Can Impact Repository Quality
+prisma/migrations
