@@ -1,8 +1,10 @@
 {
   "name": "cigas_backend",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
+
   "devDependencies": {
     "eslint": "^8.47.0",
     "node-dev": "^8.0.0",
