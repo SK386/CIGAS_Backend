@@ -74,11 +74,13 @@ export async function register(req, res) {
                 FirstName,
                 LastName,
                 email,
-                password: passwordHash
+                password: passwordHash,
+                role: "Hardcoded"
             }
         });
         return res.json({ user: newUser });
     } catch (error) {
+        console.log(`Registering new user: ${error}`);
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
             error: ReasonPhrases.INTERNAL_SERVER_ERROR,
             msg: "Internal error, try again later!"
