@@ -44,14 +44,15 @@ model Class {
 }
 
 model Person {
-  uuid          Int      @id @default(autoincrement())
-  name          String
-  last_name     String
-  contact_email String   @unique
-  phone         String?
-  role          String
-  Teacher       Teacher?
-  Student       Student?
+  uuid      Int      @id @default(autoincrement())
+  FirstName String
+  LastName  String
+  email     String   @unique
+  password  String
+  phone     String?
+  role      String
+  Teacher   Teacher?
+  Student   Student?
 }
 
 model Teacher {
