@@ -9,8 +9,10 @@
   "basePath": "/",
   "tags": [
     {
-      "name": "Authorization",
-      "description": "Endpoints related to the authorization process"
+      "name": "Authorization"
+    },
+    {
+      "name": "Users"
     }
   ],
   "schemes": [
@@ -22,7 +24,7 @@
         "tags": [
           "Authorization"
         ],
-        "summary": "Creates a new user.",
+        "summary": "Create a new user.",
         "description": "",
         "parameters": [
           {
@@ -93,9 +95,36 @@
         "tags": [
           "Authorization"
         ],
-        "summary": "Checks if the user is authorized via the authorization middleware.",
+        "summary": "Check if the user is authorized using the authorization middleware.",
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/users/{userID}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user information using their ID.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",

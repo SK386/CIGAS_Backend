@@ -8,7 +8,9 @@ const doc = {
     host: "localhost:3000",
     tags: [{
         name: "Authorization",
-        description: "Endpoints related to the authorization process"
+    },
+    {
+        name: "Users",
     }]
 };
 

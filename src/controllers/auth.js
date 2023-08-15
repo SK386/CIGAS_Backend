@@ -11,7 +11,7 @@ const prisma = new prismaclient.PrismaClient();
 
 authRoutes.post("/register", async (req, res) => {
     // #swagger.tags = ['Authorization']
-    // #swagger.summary = "Creates a new user."
+    // #swagger.summary = "Create a new user."
 
     const { FirstName, LastName, email, password, confirmpassword } = req.body;
 
@@ -156,6 +156,6 @@ authRoutes.post("/login", async (req, res) => {
 
 authRoutes.get("/authorized", tokenMiddleware, (req, res) => {
     // #swagger.tags = ['Authorization']
-    // #swagger.summary = "Checks if the user is authorized via the authorization middleware."
+    // #swagger.summary = "Check if the user is authorized using the authorization middleware."
     res.json({msg: "Authorized!"});
 });
