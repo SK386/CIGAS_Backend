@@ -1,31 +1,18 @@
-import pkg from "@prisma/client";
-const { PrismaClient } = pkg;
-import jwt from "jsonwebtoken";
-import { compare, genSalt, hash } from "bcrypt";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { compare, genSalt, hash } from "bcrypt";
+import prismaclient from "@prisma/client";
+import { tokenMiddleware } from "../middlewares/tokenValidation.js";
+import { Router } from "express";
+import jwt from "jsonwebtoken";
 import { env } from "process";
 
-const prisma = new PrismaClient();
+export const authRoutes = Router();
+const prisma = new prismaclient.PrismaClient();
 
-export function tokenMiddleware(req, res, next) {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
+authRoutes.post("/register", async (req, res) => {
+    // #swagger.tags = ['Authorization']
+    // #swagger.summary = "Creates a new user."
 
-    if (!token) {
-        return res.status(StatusCodes.FORBIDDEN).json({error: ReasonPhrases.FORBIDDEN, msg: "Access Denied!"});
-    }
-
-    try {
-        const secret = env.SECRET;
-        jwt.verify(token, secret);
-
-        next();
-    } catch (error) {
-        res.status(StatusCodes.BAD_REQUEST).json({error: ReasonPhrases.BAD_REQUEST, msg: "Invalid token!"});
-    }
-}
-
-export async function register(req, res) {
     const { FirstName, LastName, email, password, confirmpassword } = req.body;
 
     // Validations
@@ -104,9 +91,13 @@ export async function register(req, res) {
             msg: "Internal error, try again later!"
         });
     }
-}
+});
 
-export async function login(req, res) {
+
+authRoutes.post("/login", async (req, res) => {
+    // #swagger.tags = ['Authorization']
+    // #swagger.summary = "Authorize the user and send them a token."
+    // #swagger.description = "It's the frontend responsability to store the token and send it in every authorized request."
     const {email, password} = req.body;
 
     if (!email) {
@@ -161,3 +152,10 @@ export async function login(req, res) {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({err: ReasonPhrases.INTERNAL_SERVER_ERROR, msg: "Something went wrong. Try again later."});
     }
 }
+);
+
+authRoutes.get("/authorized", tokenMiddleware, (req, res) => {
+    // #swagger.tags = ['Authorization']
+    // #swagger.summary = "Checks if the user is authorized via the authorization middleware."
+    res.json({msg: "Authorized!"});
+});
