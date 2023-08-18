@@ -133,7 +133,7 @@ authRoutes.post("/login", async (req, res) => {
         const token = jwt.sign({
             id: user.uuid,
         },
-            secret
+        secret
         );
 
         return res.status(StatusCodes.ACCEPTED).json({ msg: "Authentication successful!", token });
