@@ -19,6 +19,32 @@ model Person {
   Teacher   Teacher[]
 }
 
+model Student {
+  id        Int    @id
+  person_id Int
+  school_id Int
+  Person    Person @relation(fields: [person_id], references: [id])
+  School    School @relation(fields: [school_id], references: [id])
+}
+
+model Teacher {
+  id          Int          @id
+  person_id   Int          @unique
+  school_id   Int
+  Person      Person       @relation(fields: [person_id], references: [id])
+  School      School       @relation(fields: [school_id], references: [id])
+  Disclipline Discipline[]
+}
+
+model Discipline {
+  id         Int      @id @default(autoincrement())
+  teacher_id Int
+  school_id  Int
+  name       String
+  Teacher    Teacher? @relation(fields: [teacher_id], references: [id])
+  School     School?  @relation(fields: [school_id], references: [id])
+}
+
 model Class {
   id           Int       @id @default(autoincrement())
   school_year  String
@@ -40,42 +66,12 @@ model Classroom {
   School    School  @relation(fields: [school_id], references: [id])
 }
 
-model Discipline {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  TeacherDiscipline TeacherDiscipline[]
-}
-
 model School {
-  id        Int         @id @default(autoincrement())
-  name      String
-  Class     Class[]
-  Classroom Classroom[]
-  Student   Student[]
-  Teacher   Teacher[]
-}
-
-model Student {
-  id        Int    @id
-  person_id Int
-  school_id Int
-  Person    Person @relation(fields: [person_id], references: [id])
-  School    School @relation(fields: [school_id], references: [id])
-}
-
-model Teacher {
-  id                Int                 @id
-  person_id         Int
-  school_id         Int
-  Person            Person              @relation(fields: [person_id], references: [id])
-  School            School              @relation(fields: [school_id], references: [id])
-  TeacherDiscipline TeacherDiscipline[]
-}
-
-model TeacherDiscipline {
-  id            Int        @id
-  teacher_id    Int
-  discipline_id Int
-  Teacher       Teacher    @relation(fields: [teacher_id], references: [id])
-  Discipline    Discipline @relation(fields: [discipline_id], references: [id])
+  id         Int          @id @default(autoincrement())
+  name       String
+  Class      Class[]
+  Classroom  Classroom[]
+  Student    Student[]
+  Teacher    Teacher[]
+  Discipline Discipline[]
 }
