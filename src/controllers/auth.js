@@ -1,4 +1,5 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { isValidNewUser } from "../validations.js";
 import { compare, genSalt, hash } from "bcrypt";
 import prismaclient from "@prisma/client";
 import { tokenMiddleware } from "../middlewares/tokenValidation.js";
@@ -12,42 +13,28 @@ const prisma = new prismaclient.PrismaClient();
 authRoutes.post("/register", async (req, res) => {
     // #swagger.tags = ['Authorization']
     // #swagger.summary = "Create a new user."
+    /* #swagger.responses[200] = {
+        schema: { $ref: '#/definitions/User' }
 
-    const { FirstName, LastName, email, password, confirmpassword } = req.body;
 
-    // Validations
-    if (!FirstName) {
-        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-            error: ReasonPhrases.UNPROCESSABLE_ENTITY,
-            msg: "You need a name"
-        });
-    }
-    if (!LastName) {
-        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-            error: ReasonPhrases.UNPROCESSABLE_ENTITY,
-            msg: "You need a last name"
-        });
-    }
-    if (!email) {
-        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-            error: ReasonPhrases.UNPROCESSABLE_ENTITY,
-            msg: "You need an email"
-        });
-    }
-    if (!password) {
-        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-            error: ReasonPhrases.UNPROCESSABLE_ENTITY,
-            msg: "You need a password"
-        });
-    }
-    if (!confirmpassword) {
-        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-            error: ReasonPhrases.UNPROCESSABLE_ENTITY,
-            msg: "You need to confirm your password"
-        });
-    }
+    } */
 
-    // Validating the fields themselves
+    const { FirstName, LastName, email, phone, password, confirmpassword } = req.body;
+
+    const User = {
+        FirstName,
+        LastName,
+        email,
+        phone,
+        password,
+        confirmpassword,
+    };
+
+    const validUser = isValidNewUser(User);
+
+    if (validUser != true) {
+        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(validUser);
+    }
 
     // Verifying if the user already exists
     const existingUser = await prisma.person.findUnique({
@@ -79,10 +66,13 @@ authRoutes.post("/register", async (req, res) => {
                 FirstName,
                 LastName,
                 email,
+                phone,
                 password: passwordHash,
                 role: "Hardcoded"
             }
         });
+
+        delete newUser.password; // We shouldn't include user's password on the return section.
         return res.json({ user: newUser });
     } catch (error) {
         console.log(`Registering new user: ${error}`);
@@ -98,7 +88,7 @@ authRoutes.post("/login", async (req, res) => {
     // #swagger.tags = ['Authorization']
     // #swagger.summary = "Authorize the user and send them a token."
     // #swagger.description = "It's the frontend responsability to store the token and send it in every authorized request."
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
     if (!email) {
         return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
@@ -139,17 +129,17 @@ authRoutes.post("/login", async (req, res) => {
 
     try {
         const secret = env.SECRET;
-        
+
         const token = jwt.sign({
             id: user.uuid,
         },
-        secret
+            secret
         );
 
-        return res.status(StatusCodes.ACCEPTED).json({msg: "Authentication successful!", token});
+        return res.status(StatusCodes.ACCEPTED).json({ msg: "Authentication successful!", token });
     } catch (error) {
         console.log(error);
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({err: ReasonPhrases.INTERNAL_SERVER_ERROR, msg: "Something went wrong. Try again later."});
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err: ReasonPhrases.INTERNAL_SERVER_ERROR, msg: "Something went wrong. Try again later." });
     }
 }
 );
@@ -157,5 +147,5 @@ authRoutes.post("/login", async (req, res) => {
 authRoutes.get("/authorized", tokenMiddleware, (req, res) => {
     // #swagger.tags = ['Authorization']
     // #swagger.summary = "Check if the user is authorized using the authorization middleware."
-    res.json({msg: "Authorized!"});
+    res.json({ msg: "Authorized!" });
 });
