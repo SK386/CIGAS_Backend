@@ -11,7 +11,18 @@ const doc = {
     },
     {
         name: "Users",
-    }]
+    }],
+
+    definitions: {
+        User: {
+            id: 2,
+            FirstName: "John",
+            LastName: "Doe",
+            email: "john@examplee.org",
+            phone: null,
+            role: "Hardcoded"
+        }
+    }
 };
 
 const outputFile = "../swagger.json";

@@ -42,6 +42,9 @@
                 "email": {
                   "example": "any"
                 },
+                "phone": {
+                  "example": "any"
+                },
                 "password": {
                   "example": "any"
                 },
@@ -54,7 +57,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           }
         }
       }
@@ -135,6 +141,34 @@
           "200": {
             "description": "OK"
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 2
+        },
+        "FirstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "LastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "john@examplee.org"
+        },
+        "phone": {},
+        "role": {
+          "type": "string",
+          "example": "Hardcoded"
         }
       }
     }
