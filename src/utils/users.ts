@@ -31,3 +31,9 @@ export async function findUserByEmail(email: string): Promise<Person | null> {
     where: { email }
   });
 }
+
+export async function findUserByID(id: number): Promise<Person | null> {
+  return await prisma.person.findUnique({
+    where: { id }
+  });
+}
