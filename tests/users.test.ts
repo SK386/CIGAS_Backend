@@ -1,10 +1,10 @@
 import { describe, vi, expect, it } from "vitest";
-import { createUser, findUserByEmail } from "./users";
-import prisma from "../__mocks__/client";
+import { createUser, findUserByEmail } from "../src/utils/users";
+import prisma from "../src/__mocks__/client";
 import { type Person } from "@prisma/client";
-import { type validationUser } from "../validations";
+import { type validationUser } from "../src/validations";
 
-vi.mock("../client");
+vi.mock("../src/client");
 
 describe("createUser", () => {
   it("should return a new user", async() => {

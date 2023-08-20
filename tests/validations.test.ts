@@ -1,5 +1,5 @@
-import { CustomError } from "./middlewares/errorHandler";
-import { isValidNewUser, type validationUser } from "./validations";
+import { CustomError } from "../src/middlewares/errorHandler";
+import { isValidNewUser, type validationUser } from "../src/validations";
 import { StatusCodes } from "http-status-codes";
 import { describe, it, expect } from "vitest";
 describe("isValidNewUser", () => {

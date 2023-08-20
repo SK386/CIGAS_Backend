@@ -3,7 +3,7 @@ import { type Person } from "@prisma/client";
 import { type validationUser } from "../validations";
 import { genSalt, hash } from "bcrypt";
 
-export async function createUser(userData: validationUser): Promise< Record<string, unknown> | Error | undefined> {
+export async function createUser(userData: validationUser): Promise<Record<string, unknown> | Error | undefined> {
   const salt = await genSalt(12);
   const passwordHash = await hash(userData.password, salt);
 
