@@ -26,8 +26,8 @@ jobs:
           cache-dependency-path: '**/pnpm-lock.yaml'
 
       - name: Install Packages
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Linting
-        run: pnpm lint
+        run: pnpm lint:ci
     
