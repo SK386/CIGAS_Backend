@@ -18,8 +18,4 @@ app.use("/auth", AuthRoute);
 // ERROR HANDLER MIDDLEWARE (Last middleware to use)
 app.use(errorHandler);
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
-
 export default app;
