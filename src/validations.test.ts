@@ -10,7 +10,7 @@ describe("isValidNewUser", () => {
       email: "johndoe@example.org",
       phone: "",
       password: "1234",
-      confirmPassword: "1234"
+      confirmpassword: "1234"
     };
 
     const result = isValidNewUser(user);
@@ -24,7 +24,7 @@ describe("isValidNewUser", () => {
       email: "johndoe@example.org",
       phone: "",
       password: "1234",
-      confirmPassword: "1234"
+      confirmpassword: "1234"
     };
 
     const result = isValidNewUser(user);
@@ -38,7 +38,7 @@ describe("isValidNewUser", () => {
       email: "",
       phone: "",
       password: "1234",
-      confirmPassword: "1234"
+      confirmpassword: "1234"
     };
 
     const result = isValidNewUser(user);
@@ -52,7 +52,7 @@ describe("isValidNewUser", () => {
       email: "johndoe",
       phone: "",
       password: "1234",
-      confirmPassword: "1234"
+      confirmpassword: "1234"
     };
 
     const result = isValidNewUser(user);
@@ -66,7 +66,7 @@ describe("isValidNewUser", () => {
       email: "johndoe@example.org",
       phone: "(011) 2424-3456788",
       password: "1234",
-      confirmPassword: "1234"
+      confirmpassword: "1234"
     };
 
     const result = isValidNewUser(user);
@@ -80,35 +80,35 @@ describe("isValidNewUser", () => {
       email: "johndoe@example.org",
       phone: "",
       password: "",
-      confirmPassword: "1234"
+      confirmpassword: "1234"
     };
 
     const result = isValidNewUser(user);
 
     expect(result).toEqual(new CustomError(StatusCodes.UNPROCESSABLE_ENTITY, "You need a password!"));
   });
-  it("should return an error when confirmPassword is missing", () => {
+  it("should return an error when confirmpassword is missing", () => {
     const user: validationUser = {
       FirstName: "John",
       LastName: "Doe",
       email: "johndoe@example.org",
       phone: "",
       password: "1234",
-      confirmPassword: ""
+      confirmpassword: ""
     };
 
     const result = isValidNewUser(user);
 
     expect(result).toEqual(new CustomError(StatusCodes.UNPROCESSABLE_ENTITY, "You need a to confirm your password!"));
   });
-  it("Should return an error when password and confirmPassword are different", () => {
+  it("Should return an error when password and confirmpassword are different", () => {
     const user: validationUser = {
       FirstName: "John",
       LastName: "Doe",
       email: "johndoe@example.org",
       phone: "",
       password: "1234",
-      confirmPassword: "123"
+      confirmpassword: "123"
     };
 
     const result = isValidNewUser(user);
@@ -122,7 +122,7 @@ describe("isValidNewUser", () => {
       email: "johndoe@example.org",
       phone: "(87) 98812-3456",
       password: "1234",
-      confirmPassword: "1234"
+      confirmpassword: "1234"
     };
 
     const result = isValidNewUser(user);
