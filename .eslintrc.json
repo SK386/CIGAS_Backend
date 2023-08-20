@@ -1,34 +1,56 @@
 {
     "env": {
-        "browser": true,
-        "commonjs": false,
-        "es2021": true
+        "node": true,
+        "es2022": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "eslint:recommended",
+        "standard-with-typescript"
+    ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json"
     },
     "rules": {
-        "indent": [
-            "error",
-            4
+        "@typescript-eslint/no-misused-promises": [
+            0,
+            "never"
         ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "semi": [
-            "error",
+        "@typescript-eslint/semi": [
+            2,
             "always"
         ],
-        "no-multiple-empty-lines": [
-            "error",
-            { "max": 2, "maxEOF": 0}
-        ]
+        "@typescript-eslint/quotes": [
+            1,
+            "double",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "no-use-before-define": 0,
+        "no-unused-vars": 0,
+        "@typescript-eslint/no-use-before-define": 2,
+        "@typescript-eslint/no-unused-vars": 1,
+        "prefer-arrow-callback": 1,
+        "prefer-template": 1,
+        "@typescript-eslint/no-confusing-void-expression": 0,
+        "@typescript-eslint/no-namespace": 0,
+        "curly": [
+            1,
+            "multi-line"
+        ],
+        "space-before-function-paren": [
+            2,
+            "never"
+        ],
+        "@typescript-eslint/space-before-function-paren": [
+            2,
+            "never"
+        ],
+        "@typescript-eslint/strict-boolean-expressions": 0,
+        "spaced-comment": "off"
     }
 }

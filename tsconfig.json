@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "CommonJS",
+        "moduleResolution": "Node",
+        "outDir": "./dist",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "strictNullChecks": true,
+        "strict": true
+    },
+    "exclude": [
+        "node_modules",
+        "esquizo"
+    ]
+}
