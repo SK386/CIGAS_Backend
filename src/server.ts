@@ -1,15 +1,18 @@
-import swaggerFile from "../swagger.json";
-import swaggerUI from "swagger-ui-express";
-import express from "express";
-import { errorHandler } from "./middlewares/errorHandler";
 import { AuthRoute, UserRoute, UsersRoute } from "./routes";
-import "dotenv/config";
+import { errorHandler } from "./middlewares/errorHandler";
 import { authMiddleware } from "./middlewares/auth";
-const app = express();
+import swaggerUI from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
+import options from "./swaggerOptions";
+import express from "express";
+import "dotenv/config";
 
+const app = express();
 app.use(express.json());
 
-app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerFile));
+const swaggerSpec = swaggerJSDoc(options);
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 // Application middlewares
 app.use("/auth", AuthRoute);
