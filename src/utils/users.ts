@@ -32,8 +32,16 @@ export async function findUserByEmail(email: string): Promise<Person | null> {
   });
 }
 
-export async function findUserByID(id: number): Promise<Person | null> {
+export async function findUserByID(id: number): Promise<Record<string, unknown> | null> {
   return await prisma.person.findUnique({
-    where: { id }
+    where: { id },
+    select: {
+      id: true,
+      FirstName: true,
+      LastName: true,
+      email: true,
+      phone: true,
+      role: true
+    }
   });
 }
