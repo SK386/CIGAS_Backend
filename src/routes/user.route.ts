@@ -8,14 +8,16 @@ const router = Router();
  * /user:
  *   get:
  *     summary: Get the authenticated user
- *       security:
- *        - BearerAuth: []
- *       responses:
- *         200:
- *           content:
- *             application/json:
- *               schema:
- *                 $ref: '#/components/schemas/user'
+ *     tags:
+ *       - Users
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/user'
  */
 router.get("/", UserAuthenticated);
 
