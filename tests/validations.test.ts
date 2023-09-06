@@ -2,6 +2,7 @@ import { CustomError } from "../src/middlewares/errorHandler";
 import { isValidNewUser, type validationUser } from "../src/validations";
 import { StatusCodes } from "http-status-codes";
 import { describe, it, expect } from "vitest";
+
 describe("isValidNewUser", () => {
   it("should return an error when FirstName is missing", () => {
     const user: validationUser = {

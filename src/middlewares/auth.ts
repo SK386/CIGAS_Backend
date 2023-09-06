@@ -24,7 +24,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     // It's not likely to happen but a token can be valid while the user doesn't exist anymore
     const user = await findUserByID(userID);
     if (!user) {
-      return next(new CustomError(StatusCodes.NOT_FOUND, "User does not exist!"));
+      return next(new CustomError(StatusCodes.NOT_FOUND, "Invalid token! User does not exist!"));
     }
 
     next();

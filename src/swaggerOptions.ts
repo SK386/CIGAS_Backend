@@ -11,7 +11,7 @@ const swaggerDefinition = {
         type: "http",
         scheme: "bearer",
         bearerFormat: "JWT",
-        in: "header"
+        in: "cookie"
       }
     },
     schemas: {

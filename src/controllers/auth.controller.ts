@@ -7,6 +7,7 @@ import { type Secret, sign } from "jsonwebtoken";
 import { createUser, findUserByEmail } from "../utils/users";
 
 const SECRET_KEY: Secret = process.env.SECRET ?? "";
+const SevenDaysInMS = 7 * 24 * 60 * 60 * 1000;
 
 export const signUp = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
   const User: validationUser = req.body;
@@ -52,6 +53,8 @@ export const login = async(req: Request, res: Response, next: NextFunction): Pro
     return next(new CustomError(StatusCodes.NOT_FOUND, "User not found!"));
   }
 
+  const { password: _, ...userNoPassword } = user;
+
   const checkPassword = await compare(login.password, String(user?.password));
 
   if (!checkPassword) {
@@ -66,8 +69,9 @@ export const login = async(req: Request, res: Response, next: NextFunction): Pro
 
     const token = sign({
       id: user?.id
-    }, SECRET_KEY);
-    res.status(StatusCodes.OK).json({ msg: "Authenticated!", token });
+    }, SECRET_KEY, { expiresIn: "7d" });
+    res.cookie("userToken", token, { maxAge: SevenDaysInMS, httpOnly: true, secure: Boolean(process.env.COOKIE_SECURE) });
+    res.status(StatusCodes.OK).json({ msg: "Authenticated!", user: userNoPassword });
   } catch (error) {
     next(error);
   }
