@@ -1,22 +1,28 @@
 import { Router } from "express";
-import { UserByID } from "../controllers/users.controller";
+import { UserByID, search } from "../controllers/users.controller";
 
 const router = Router();
 
 /**
  * @swagger
- * /users/{userID}:
+ * /users/search:
  *   get:
- *     summary: Gather info about a user based on their ID
+ *     summary: Search for an user
  *     tags:
- *       - Users
+ *       - user
  *     parameters:
- *       - in: path
- *         name: userID
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         required: false
+ *         description: query
+ *       - in: query
+ *         name: uuid
  *         schema:
  *           type: integer
- *         required: true
- *         description: Numeric ID of the user to get
+ *         required: false
+ *         description: User ID
  *     security:
  *      - BearerAuth: []
  *     responses:
@@ -24,8 +30,10 @@ const router = Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/user'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/user'
  */
-router.get("/:userID", UserByID);
+router.get("/search", search);
 
 export default router;

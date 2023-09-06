@@ -9,7 +9,7 @@ const router = Router();
  *   get:
  *     summary: Get the authenticated user
  *     tags:
- *       - Users
+ *       - user
  *     security:
  *       - BearerAuth: []
  *     responses:
