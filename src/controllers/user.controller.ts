@@ -1,23 +1,20 @@
-import { findUserByID } from "../utils/users";
-import { CustomError } from "../middlewares/errorHandler";
-import { type Request, type Response, type NextFunction } from "express";
-import { StatusCodes } from "http-status-codes";
-import { getAuthorizedUserID } from "../utils/auth";
+import { type NextFunction, type Request, type Response, Router } from "express";
+import authMiddleware from "../middleware/authentication.middleware";
+import { FindUserById } from "../services/user.service";
+import { findUserIdByToken } from "../utils/token.utils";
 
-export const UserAuthenticated = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-  // If we've got to this point, the user exists and is authorized
-  const userID = getAuthorizedUserID(req) as number;
+const router = Router();
 
+router.get("/user", authMiddleware, async(req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await findUserByID(userID);
+    const token = req.cookies.userToken;
+    const userID = await findUserIdByToken(token) as number;
 
-    if (!user) {
-      return next(new CustomError(StatusCodes.INTERNAL_SERVER_ERROR, "Internal Server Error!"));
-    }
-
+    const user = await FindUserById(userID, false);
     res.json(user);
-    next();
-  } catch (err) {
-    return next(err);
+  } catch (error) {
+    next(error);
   }
-};
+});
+
+export default router;

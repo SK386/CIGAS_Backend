@@ -1,78 +1,30 @@
-import { type NextFunction, type Request, type Response } from "express";
-import { type LoginUser, isValidLoginUser, isValidNewUser, type validationUser } from "../validations";
-import { CustomError } from "../middlewares/errorHandler";
-import { StatusCodes } from "http-status-codes";
-import { compare } from "bcrypt";
-import { type Secret, sign } from "jsonwebtoken";
-import { createUser, findUserByEmail } from "../utils/users";
+import { type NextFunction, type Request, type Response, Router } from "express";
+import { createUser, login, sixtyDaysInSeconds } from "../services/auth.service";
 
-const SECRET_KEY: Secret = process.env.SECRET ?? "";
-const SevenDaysInMS = 7 * 24 * 60 * 60 * 1000;
+const router = Router();
 
-export const signUp = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const User: validationUser = req.body;
-
-  const invalidUser = isValidNewUser(User);
-
-  if (invalidUser) {
-    return next(invalidUser);
-  }
-
+router.post("/users", async(req: Request, res: Response, next: NextFunction): Promise<undefined> => {
   try {
-    const userExists = await findUserByEmail(User.email);
-
-    if (userExists) {
-      throw new CustomError(StatusCodes.CONFLICT, "User already exists!");
-    }
-
-    const newUser = await createUser(User);
-
-    if (newUser instanceof Error) {
-      throw newUser;
-    }
-    res.json(newUser);
-    next();
-  } catch (error) {
-    return next(error);
-  }
-};
-
-export const login = async(req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const login: LoginUser = req.body;
-
-  const invalidLogin = isValidLoginUser(login);
-
-  if (invalidLogin) {
-    return next(invalidLogin);
-  }
-
-  // The user should exist...
-  const user = await findUserByEmail(login.email);
-
-  if (!user) {
-    return next(new CustomError(StatusCodes.NOT_FOUND, "User not found!"));
-  }
-
-  const { password: _, ...userNoPassword } = user;
-
-  const checkPassword = await compare(login.password, String(user?.password));
-
-  if (!checkPassword) {
-    return next(new CustomError(StatusCodes.UNPROCESSABLE_ENTITY, "Invalid password!"));
-  }
-
-  try {
-    if (!SECRET_KEY) {
-      console.error("SECRET_KEY shouldn't be empty!");
-      return next(new CustomError(StatusCodes.INTERNAL_SERVER_ERROR, "Internal server error!"));
-    }
-
-    const token = sign({
-      id: user?.id
-    }, SECRET_KEY, { expiresIn: "7d" });
-    res.cookie("userToken", token, { maxAge: SevenDaysInMS, httpOnly: true, secure: Boolean(process.env.COOKIE_SECURE) });
-    res.status(StatusCodes.OK).json({ msg: "Authenticated!", user: userNoPassword });
+    const user = await createUser(req.body.user);
+    res.json({ user });
   } catch (error) {
     next(error);
   }
-};
+});
+
+router.post("/users/login", async(req: Request, res: Response, next: NextFunction): Promise<undefined> => {
+  try {
+    const user = await login(req.body.user);
+
+    res.cookie("userToken", user?.token, {
+      maxAge: sixtyDaysInSeconds,
+      httpOnly: true,
+      secure: Boolean(process.env.COOKIE_SECURE) ?? false
+    });
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default router;

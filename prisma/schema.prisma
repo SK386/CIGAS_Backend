@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,31 +10,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Person {
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+model User {
   id        Int       @id @default(autoincrement())
   FirstName String
   LastName  String
   email     String    @unique
   password  String
   phone     String?
-  role      String
+  role      UserRole
   Student   Student[]
   Teacher   Teacher[]
 }
 
 model Student {
-  id        Int    @id
-  person_id Int
+  id        Int    @id @default(autoincrement())
+  user_id Int
   school_id Int
-  Person    Person @relation(fields: [person_id], references: [id])
+  User    User @relation(fields: [user_id], references: [id])
   School    School @relation(fields: [school_id], references: [id])
 }
 
 model Teacher {
-  id          Int          @id
-  person_id   Int          @unique
+  id        Int    @id @default(autoincrement())
+  user_id   Int          @unique
   school_id   Int
-  Person      Person       @relation(fields: [person_id], references: [id])
+  User      User       @relation(fields: [user_id], references: [id])
   School      School       @relation(fields: [school_id], references: [id])
   Disclipline Discipline[]
 }

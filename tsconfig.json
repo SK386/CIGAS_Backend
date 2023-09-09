@@ -12,7 +12,6 @@
         "strict": true
     },
     "exclude": [
-        "node_modules",
-        "esquizo"
+        "node_modules"
     ]
 }
