@@ -30,19 +30,20 @@ model User {
 
 model Student {
   id        Int    @id @default(autoincrement())
-  user_id Int
+  user_id   Int
   school_id Int
-  User    User @relation(fields: [user_id], references: [id])
+  User      User   @relation(fields: [user_id], references: [id])
   School    School @relation(fields: [school_id], references: [id])
 }
 
 model Teacher {
-  id        Int    @id @default(autoincrement())
-  user_id   Int          @unique
+  id          Int          @id @default(autoincrement())
+  user_id     Int          @unique
   school_id   Int
-  User      User       @relation(fields: [user_id], references: [id])
+  User        User         @relation(fields: [user_id], references: [id])
   School      School       @relation(fields: [school_id], references: [id])
   Disclipline Discipline[]
+  Article     Article[]
 }
 
 model Discipline {
@@ -77,10 +78,26 @@ model Classroom {
 
 model School {
   id         Int          @id @default(autoincrement())
-  name       String
+  name       String       @unique
   Class      Class[]
   Classroom  Classroom[]
   Student    Student[]
   Teacher    Teacher[]
   Discipline Discipline[]
+  Article    Article[]
+}
+
+model Article {
+  id       Int @id @default(autoincrement())
+  authorId Int
+  schoolId Int
+
+  title   String
+  content String @db.LongText
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Teacher Teacher @relation(fields: [authorId], references: [id])
+  School  School  @relation(fields: [schoolId], references: [id])
 }

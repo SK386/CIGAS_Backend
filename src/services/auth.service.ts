@@ -10,7 +10,7 @@ import { isValidLoginUser, isValidNewUser } from "../utils/auth";
 import { generateToken } from "../utils/token.utils";
 import { FindUserByEmail } from "./user.service";
 
-export const sixtyDaysInSeconds = 60 * 24 * 60 * 60;
+export const sixtyDaysInSeconds = 60 * 24 * 60 * 60 * 1000;
 
 const checkUserUniqueness = async(email: string): Promise<undefined> => {
   const existingUserByEmail = await prisma.user.findUnique({
