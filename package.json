@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "prisma migrate deploy && tsc",
     "start": "node dist/src/index.js",
     "lint": "eslint --fix . --ext .ts",
     "lint:ci": "eslint . --ext .ts",
