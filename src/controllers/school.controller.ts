@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response, Router } from "express";
 import authMiddleware from "../middleware/authentication.middleware";
-import { createSchool, deleteSchool, listSchools, updateSchool } from "../services/school.service";
+import { createSchool, deleteSchool, findSchoolById, listSchools, updateSchool } from "../services/school.service";
 
 const router = Router();
 // Create
@@ -20,6 +20,18 @@ router.get("/schools", authMiddleware, async(req: Request, res: Response, next: 
     const schools = await listSchools();
 
     res.json({ schools });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/school/:id", authMiddleware, async(req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+
+    const school = await findSchoolById(parseInt(id));
+
+    res.json({ school });
   } catch (error) {
     next(error);
   }

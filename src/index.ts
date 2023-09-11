@@ -43,10 +43,6 @@ app.get("/api-docs", (req, res) => {
   });
 });
 
-app.get("/", (req, res) => {
-  return res.json({ message: "API is running!" });
-});
-
 app.use((err: HttpException, req: Request, res: Response, next: NextFunction): void => {
   console.error(err);
   const statusCode = err.errorCode ?? StatusCodes.INTERNAL_SERVER_ERROR;

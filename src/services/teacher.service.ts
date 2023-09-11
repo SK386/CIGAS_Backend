@@ -1,5 +1,7 @@
-import { type Teacher } from "@prisma/client";
+import { type User, type Teacher } from "@prisma/client";
+import { StatusCodes } from "http-status-codes";
 import prisma from "../../prisma/prisma-client";
+import HttpException from "../models/http-exception.model";
 import { findSchoolById } from "./school.service";
 import { FindUserById } from "./user.service";
 
@@ -28,6 +30,27 @@ export const listTeachersInSchool = async(schoolId: number): Promise<Teacher[] |
   });
 
   return teachers;
+};
+
+export const findTeacherById = async(teacherId: number): Promise<Teacher | undefined> => {
+  const teacher = await prisma.teacher.findUnique({
+    where: {
+      id: teacherId
+    }
+  });
+  if (teacher) {
+    return teacher;
+  } else {
+    throw new HttpException(StatusCodes.NOT_FOUND, "Teacher not found!");
+  }
+};
+
+export const findUserByTeacherId = async(teacherId: number): Promise<Partial<User> | undefined> => {
+  const teacher = await findTeacherById(teacherId) as Teacher;
+
+  const user = await FindUserById(teacher?.user_id, false);
+
+  return user;
 };
 
 export const findTeacherIdByUserId = async(userId: number): Promise<number | undefined> => {

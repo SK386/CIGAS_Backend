@@ -73,6 +73,8 @@ export const login = async(userPayload: LoginInput): Promise<Partial<User> & { t
         ...userNoPass,
         token: generateToken(user)
       };
+    } else {
+      throw new HttpException(StatusCodes.UNPROCESSABLE_ENTITY, "Wrong password!");
     }
   }
 };

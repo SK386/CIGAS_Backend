@@ -12,4 +12,8 @@ const api = Router()
   .use(articleController)
   .use(userController);
 
+api.get("/", (req, res) => {
+  return res.json({ message: "API is running!" });
+});
+
 export default Router().use("/api", api);
