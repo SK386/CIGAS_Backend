@@ -1,3 +1,4 @@
+import { type User } from "@prisma/client";
 import { type NextFunction, type Request, type Response, Router } from "express";
 import authMiddleware from "../middleware/authentication.middleware";
 import { FindUserById, deleteUser, searchUser, updateUser } from "../services/user.service";
@@ -31,9 +32,9 @@ router.patch("/user", authMiddleware, async(req: Request, res: Response, next: N
     const token = req.cookies.userToken;
     const userID = await findUserIdByToken(token) as number;
 
-    const updatedUser = await updateUser(userID, req.body.user);
+    const updatedUser = await updateUser(userID, req.body.user) as User;
 
-    const { password: _, ...userNoPass } = updatedUser;
+    const { password, ...userNoPass } = updatedUser;
     res.json(userNoPass);
   } catch (error) {
     next(error);
