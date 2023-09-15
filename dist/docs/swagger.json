@@ -1,0 +1,180 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "CIGAS API",
+        "license": {
+            "name": "GNU GPL version 3",
+            "url": "https://opensource.org/licenses/gpl-3-0"
+        }
+    },
+    "basePath": "/api",
+    "paths": {
+        "/users": {
+            "post": {
+                "summary": "Create a new user",
+                "tags": ["User and Authentication"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterInput"
+                        },
+                        "required": true,
+                        "description": "User registration input"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/RegisteredUser"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "409": {
+                        "description": "User already exists"
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "summary": "User login",
+                "tags": ["User and Authentication"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/LoginInput"
+                        },
+                        "required": true,
+                        "description": "User login input"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "schema": {
+                            "$ref": "#/definitions/UserInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "summary": "Get current user",
+                "description": "Gets the currently logged-in user",
+                "tags": ["User and Authentication"],
+                "security": [{ "jwt": [] }]
+            }
+        }
+    },
+    "securityDefinitions": {
+        "jwt": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "cookie"
+        }
+    },
+    "definitions": {
+        "RegisterInput": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "object",
+                    "properties": {
+                        "FirstName": {
+                            "type": "string"
+                        },
+                        "LastName": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        },
+                        "role": {
+                            "type": "string",
+                            "enum": ["STUDENT", "TEACHER"]
+                        }
+                    }
+                }
+            }
+        },
+        "RegisteredUser": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "object",
+                    "properties": {
+                        "FirstName": {
+                            "type": "string"
+                        },
+                        "LastName": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        },
+                        "role": {
+                            "type": "string",
+                            "enum": ["STUDENT", "TEACHER"]
+                        }
+                    }
+                }
+            }
+        },
+        "LoginInput": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "UserInfo": {
+            "type": "object",
+            "properties": {
+                "FirstName": {
+                    "type": "string"
+                },
+                "LastName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string",
+                    "enum": ["STUDENT", "TEACHER"]
+                }
+            }
+        }
+    }
+}
