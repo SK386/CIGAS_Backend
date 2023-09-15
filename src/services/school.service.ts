@@ -2,6 +2,7 @@ import { type School } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import prisma from "../../prisma/prisma-client";
 import HttpException from "../models/http-exception.model";
+import { FindUserById } from "./user.service";
 
 // Create
 export const createSchool = async(name: string): Promise<School | undefined> => {
@@ -37,6 +38,40 @@ export const findSchoolById = async(id: number): Promise<School | undefined> => 
     return school;
   }
   throw new HttpException(StatusCodes.NOT_FOUND, "School does not exist!");
+};
+
+export const findSchoolsByUserId = async(id: number): Promise<School[] | undefined> => {
+// Use Prisma to find the user by their ID
+  const user = await prisma.user.findUnique({
+    where: { id }
+  });
+
+  if (!user) {
+    return undefined;
+  }
+
+  // Find schools associated with the user through the Student and Teacher models
+  const studentSchools = await prisma.student.findMany({
+    where: { user_id: id },
+    include: {
+      School: true
+    }
+  });
+
+  const teacherSchools = await prisma.teacher.findMany({
+    where: { user_id: id },
+    include: {
+      School: true
+    }
+  });
+
+  // Combine the schools from both student and teacher associations
+  const schools = [
+    ...studentSchools.map((student) => student.School),
+    ...teacherSchools.map((teacher) => teacher.School)
+  ];
+
+  return schools;
 };
 
 // Update
