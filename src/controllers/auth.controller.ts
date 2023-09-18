@@ -12,7 +12,7 @@ router.post("/users", async(req: Request, res: Response, next: NextFunction): Pr
   }
 });
 
-router.get("/user/logout", (req, res, next) => {
+router.delete("/user/logout", (req, res, next) => {
   if (req.cookies.userToken) {
     res.clearCookie("userToken");
     res.json({ message: "Logged out!" });
