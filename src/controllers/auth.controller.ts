@@ -13,8 +13,11 @@ router.post("/users", async(req: Request, res: Response, next: NextFunction): Pr
 });
 
 router.get("/user/logout", (req, res, next) => {
-  res.clearCookie("userToken");
-  res.json({ message: "Logged out!" });
+  if (req.cookies.userToken) {
+    res.clearCookie("userToken");
+    res.json({ message: "Logged out!" });
+  }
+  res.json({ message: "You're not logged in!" });
 });
 
 router.post("/users/login", async(req: Request, res: Response, next: NextFunction): Promise<undefined> => {
